@@ -92,7 +92,7 @@
         function setNextUpdate() {
             var now = new Date();
 
-            if (now.getMinutes() > 30) {
+            if (now.getMinutes() >= 30) {
                 now.setHours(now.getHours() + 1)
                 now.setMinutes(0);
                 now.setSeconds(0);
