@@ -1,0 +1,46 @@
+html { 
+    background: url(https://source.unsplash.com/collection/327760/1920x1080.jpg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+  
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.time {
+    text-align: center;
+    vertical-align: middle;
+    color: white;
+    font-size: 9em;
+    font-family: "Helvetica";
+    font-weight: bold;
+
+    /* To center it vertically */
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%); 
+
+    text-shadow: #00000055 0px 0 30px;
+}
+
+.date {
+  text-align: center;
+  vertical-align: middle;
+  color: white;
+  font-size: 2em;
+  font-family: "Helvetica";
+  font-weight: bold;
+
+  /* To center it vertically */
+  position: relative;
+  top: 42%;
+  transform: translateY(-50%);
+
+  text-shadow: #00000055 0px 0 20px;
+}

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Clock</title>
+
+    <link rel="stylesheet" href="styles.css">
+
+    <script>
+        function updateDateTime() {
+
+            // Get the time
+            var today = new Date();
+            var hours = today.getHours();
+            var minutes = today.getMinutes();
+            var seconds = today.getSeconds();
+            minutes = addLeadingZero(minutes);
+            seconds = addLeadingZero(seconds);
+
+            // Get the date
+            weekday = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+            dayOfWeek = weekday[today.getDay()];
+            dayOfMonth = addOrdinalSuffix(today.getDate());
+            months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+            month = months[today.getMonth()];
+            year = today.getFullYear();
+            meridian = today.getHours() > 12 ? "PM" : "AM";
+
+            // Update the page
+            document.getElementById('time').innerHTML = hours + ":" + minutes + ":" + seconds;
+            document.getElementById('date').innerHTML = dayOfWeek + ", " + month + ' ' + dayOfMonth + ' ' + year;
+
+            // Set it up to update every 500 ms
+            var t = setTimeout(updateDateTime, 500);
+
+            // If we're at a half hour mark, refresh
+            if (minutes == 30 && reloaded == false) {
+                reload();
+                reloaded = true;
+            }
+            else if (minutes == 30 == false) {
+                reloaded = false;
+            }
+        }
+
+        function addLeadingZero(i) {
+            if (i < 10) { i = "0" + i };
+            return i;
+        }
+
+        function addOrdinalSuffix(i) {
+            var j = i % 10,
+                k = i % 100;
+            if (j == 1 && k != 11) {
+                return i + "st";
+            }
+            if (j == 2 && k != 12) {
+                return i + "nd";
+            }
+            if (j == 3 && k != 13) {
+                return i + "rd";
+            }
+            return i + "th";
+        }
+
+        function reload() {
+            window.location.reload();
+        }
+
+        var reloaded = false;
+
+    </script>
+
+</head>
+
+<body onload="updateDateTime()">
+
+    <table id="table" class="table">
+        <tbody>
+            <tr>
+                <div class="time" id="time"></div>
+            </tr>
+            <tr>
+                <div class="date" id="date"></div>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+
+</html>
