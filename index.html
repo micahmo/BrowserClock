@@ -3,17 +3,20 @@
 
 <head>
     <meta charset="UTF-8">
-
     <title>Clock</title>
-
     <link rel="stylesheet" href="styles.css">
 
     <script>
-        function updateDateTime() {
+        function initialize() {
+            setNextUpdate();
+            updateDateTime();
+        }
 
+        function updateDateTime() {
             // Get the time
             var today = new Date();
             var hours = today.getHours();
+            if (hours > 12) hours -= 12;
             var minutes = today.getMinutes();
             var seconds = today.getSeconds();
             minutes = addLeadingZero(minutes);
@@ -35,13 +38,9 @@
             // Set it up to update every 500 ms
             var t = setTimeout(updateDateTime, 500);
 
-            // If we're at a half hour mark, refresh
-            if (minutes == 30 && reloaded == false) {
+            if (timeToUpdate()) {
+                setNextUpdate();
                 reload();
-                reloaded = true;
-            }
-            else if (minutes == 30 == false) {
-                reloaded = false;
             }
         }
 
@@ -65,17 +64,35 @@
             return i + "th";
         }
 
+        function timeToUpdate() {
+            var nextUpdate = new Date(sessionStorage.getItem("nextUpdate"));
+            return new Date() > nextUpdate;
+        }
+
+        function setNextUpdate() {
+            var now = new Date();
+            
+            if (now.getMinutes() > 30) {
+                now.setHours(now.getHours() + 1)
+                now.setMinutes(0);
+                now.setSeconds(0);
+            }
+            else {
+                now.setMinutes(30);
+                now.setSeconds(0);
+            }
+            
+            sessionStorage.setItem("nextUpdate", now);
+        }
+
         function reload() {
             window.location.reload();
         }
-
-        var reloaded = false;
-
     </script>
 
 </head>
 
-<body onload="updateDateTime()">
+<body onload="initialize()">
 
     <table id="table" class="table">
         <tbody>
