@@ -23,7 +23,13 @@
                 }
             }
 
-            localStorage.setItem("fullscreen", "false");
+            var fullscreen = localStorage.getItem("fullscreen");
+            if (fullscreen == null) {
+                localStorage.setItem("fullscreen", "false");
+            }
+            else if (fullscreen == "true") {
+                enterFullscreen(document.documentElement);
+            }
         }
 
         function updateDateTime() {
@@ -140,32 +146,39 @@
             var element = document.documentElement;
 
             if (fullscreen == "true") {
-                if (document.exitFullscreen)
-                    document.exitFullscreen();
-                else if (document.mozCancelFullScreen)
-                    document.mozCancelFullScreen();
-                else if (document.webkitExitFullscreen)
-                    document.webkitExitFullscreen();
-                else if (document.msExitFullscreen)
-                    document.msExitFullscreen();
-
-
-                document.getElementById("fullscreen_text").innerHTML = "Enter fullscreen"
-                localStorage.setItem("fullscreen", "false");
+                exitFullscreen(element);
             }
             else {
-                if (element.requestFullscreen)
-                    element.requestFullscreen();
-                else if (element.mozRequestFullScreen)
-                    element.mozRequestFullScreen();
-                else if (element.webkitRequestFullscreen)
-                    element.webkitRequestFullscreen();
-                else if (element.msRequestFullscreen)
-                    element.msRequestFullscreen();
-
-                document.getElementById("fullscreen_text").innerHTML = "Exit fullscreen"
-                localStorage.setItem("fullscreen", "true");
+                enterFullscreen(element);
             }
+        }
+
+        function enterFullscreen(element) {
+            if (element.requestFullscreen)
+                element.requestFullscreen();
+            else if (element.mozRequestFullScreen)
+                element.mozRequestFullScreen();
+            else if (element.webkitRequestFullscreen)
+                element.webkitRequestFullscreen();
+            else if (element.msRequestFullscreen)
+                element.msRequestFullscreen();
+
+            document.getElementById("fullscreen_text").innerHTML = "Exit fullscreen"
+            localStorage.setItem("fullscreen", "true");
+        }
+
+        function exitFullscreen() {
+            if (document.exitFullscreen)
+                document.exitFullscreen();
+            else if (document.mozCancelFullScreen)
+                document.mozCancelFullScreen();
+            else if (element.webkitExitFullscreen)
+                document.webkitExitFullscreen();
+            else if (document.msExitFullscreen)
+                document.msExitFullscreen();
+
+            document.getElementById("fullscreen_text").innerHTML = "Enter fullscreen"
+            localStorage.setItem("fullscreen", "false");
         }
 
     </script>
@@ -191,8 +204,8 @@
                     <li id="fullscreen_text">Enter fullscreen</li>
                 </a>
                 <a onclick="reload()">
-                        <li >Refresh</li>
-                    </a>
+                    <li>Refresh</li>
+                </a>
             </ul>
         </div>
     </nav>
