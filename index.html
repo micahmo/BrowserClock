@@ -10,6 +10,20 @@
         function initialize() {
             setNextUpdate();
             updateDateTime();
+
+            var favorites = JSON.parse(localStorage.getItem("favorites"));
+            if (favorites == null) {
+                window.favorites = {};
+            }
+            else {
+                window.favorites = favorites;
+
+                for (var key in window.favorites) {
+                    addItemToMenu(window.favorites[key], key);
+                }
+            }
+
+            localStorage.setItem("fullscreen", "false");
         }
 
         function updateDateTime() {
@@ -65,13 +79,13 @@
         }
 
         function timeToUpdate() {
-            var nextUpdate = new Date(sessionStorage.getItem("nextUpdate"));
+            var nextUpdate = new Date(localStorage.getItem("nextUpdate"));
             return new Date() > nextUpdate;
         }
 
         function setNextUpdate() {
             var now = new Date();
-            
+
             if (now.getMinutes() > 30) {
                 now.setHours(now.getHours() + 1)
                 now.setMinutes(0);
@@ -81,18 +95,105 @@
                 now.setMinutes(30);
                 now.setSeconds(0);
             }
-            
-            sessionStorage.setItem("nextUpdate", now);
+
+            localStorage.setItem("nextUpdate", now);
         }
 
         function reload() {
             window.location.reload();
         }
+
+        function promptForNewMenuItem() {
+            var url = prompt("Enter URL: ");
+            if (!url.startsWith("http")) {
+                url = "https://" + url;
+            }
+
+            var name = prompt("Enter name: ");
+
+            addItemToMenu(url, name);
+
+            window.favorites[name] = url;
+            localStorage.setItem("favorites", JSON.stringify(window.favorites));
+        }
+
+        function promptForRemove() {
+            var name = prompt("Enter favorite to remove: ");
+            delete window.favorites[name];
+            localStorage.setItem("favorites", JSON.stringify(window.favorites))
+            reload();
+        }
+
+        function addItemToMenu(url, name) {
+            var menu = document.getElementById("menu");
+            menu.innerHTML = `
+            <a href="` + url + `">
+                <li>` + name + `</li>
+            </a>` +
+                menu.innerHTML;
+        }
+
+        var favorites = {};
+
+        function toggleFullscreen() {
+            var fullscreen = localStorage.getItem("fullscreen");
+            var element = document.documentElement;
+
+            if (fullscreen == "true") {
+                if (document.exitFullscreen)
+                    document.exitFullscreen();
+                else if (document.mozCancelFullScreen)
+                    document.mozCancelFullScreen();
+                else if (document.webkitExitFullscreen)
+                    document.webkitExitFullscreen();
+                else if (document.msExitFullscreen)
+                    document.msExitFullscreen();
+
+
+                document.getElementById("fullscreen_text").innerHTML = "Enter fullscreen"
+                localStorage.setItem("fullscreen", "false");
+            }
+            else {
+                if (element.requestFullscreen)
+                    element.requestFullscreen();
+                else if (element.mozRequestFullScreen)
+                    element.mozRequestFullScreen();
+                else if (element.webkitRequestFullscreen)
+                    element.webkitRequestFullscreen();
+                else if (element.msRequestFullscreen)
+                    element.msRequestFullscreen();
+
+                document.getElementById("fullscreen_text").innerHTML = "Exit fullscreen"
+                localStorage.setItem("fullscreen", "true");
+            }
+        }
+
     </script>
 
 </head>
 
 <body onload="initialize()">
+
+    <nav role="navigation">
+        <div id="menuToggle">
+            <input type="checkbox" />
+            <span></span>
+            <span></span>
+            <span></span>
+            <ul id="menu">
+                <a onclick="promptForNewMenuItem()">
+                    <li class="hint">Add favorite links...</li>
+                </a>
+                <a onclick="promptForRemove()">
+                    <li class="hint">Remove links...</li>
+                </a>
+                <a onclick="toggleFullscreen()">
+                    <li id="fullscreen_text">Enter fullscreen</li>
+                </a>
+            </ul>
+        </div>
+    </nav>
+
 
     <table id="table" class="table">
         <tbody>
