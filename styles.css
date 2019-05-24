@@ -24,7 +24,7 @@ html, body {
     /* To center it vertically */
     position: relative;
     top: 50%;
-    transform: translateY(-50%); 
+    transform: translateY(-75%); 
 
     text-shadow: #00000055 0px 0 30px;
 }
@@ -39,8 +39,8 @@ html, body {
 
   /* To center it vertically */
   position: relative;
-  top: 42%;
-  transform: translateY(-50%);
+  top: 40%;
+  transform: translateY(-100%);
 
   text-shadow: #00000055 0px 0 20px;
 }
