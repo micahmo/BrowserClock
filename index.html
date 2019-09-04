@@ -129,6 +129,15 @@
             refreshPage();
         }
 
+        function promptForReorder() {
+            var name = prompt("Enter favorite to move to top: ");
+            var url = window.favorites[name];
+            delete window.favorites[name];
+            window.favorites[name] = url;
+            localStorage.setItem("favorites", JSON.stringify(window.favorites));
+            refreshPage();
+        }
+
         function addItemToMenu(url, name) {
             var menu = document.getElementById("menu");
             menu.innerHTML = `
@@ -212,6 +221,9 @@
                 </a>
                 <a onclick="promptForRemove()">
                     <li class="hint">Remove links...</li>
+                </a>
+                <a onclick="promptForReorder()">
+                    <li class="hint">Reorder links...</li>
                 </a>
                 <a onclick="toggleFullscreen()">
                     <li id="fullscreen_text">Enter fullscreen</li>
